@@ -1,0 +1,36 @@
+1) Install AWS CLI
+sudo yum install zip unzip wget -y
+curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+unzip awscli-bundle.zip
+./awscli-bundle/install -b ~/bin/aws
+
+2) Create user AMI + add Permissions at Security Credentials
+
+3) Setting AWS (set bên root để chạy crontab)
+aws configure
+or
+aws configure --profile <ACCOUNT1>
+
+4) Upload file aws-ec2-ami-backup-retention.sh to /home/centos/bin/aws
+sudo chmod 777 aws-ec2-ami-backup-retention.sh
+Change AWS_EXEC="/home/centos/bin/aws" at file aws-ec2-ami-backup-retention.sh
+
+5) Execute script to test
+sh aws-ec2-ami-backup-retention.sh <INSTANCE_NAME> <RETENTION_DAYS> <PROFILE>
+sh aws-ec2-ami-backup-retention.sh site_koi 1 default
+
+6) Set cron
+https://finalstyle.com/danh-cho-ky-thuat-vien/huong-dan-cai-dat-va-cau-hinh-cronjob-tren-centos.html
+http://www.openjs.com/scripts/jslibrary/demos/crontab.php
+sudo systemctl status crond.service
+sudo systemctl restart crond.service
+crontab -e
+
+phút giờ ngày tháng ngày-trong-tuần user câu lệnh
+https://techblog.vn/20-vi-du-de-hieu-ve-crontab-tren-he-dieu-hanh-linux
+
+30 phút chạy 1 lần
+*/30 * * * * /bin/bash /home/centos/aws-ec2-ami-backup-retention.sh > /home/centos/aws-ec2-ami-backup-retention.log 2>&1
+
+Chạy lúc 4h sáng hằng ngày
+0 4 * * * /bin/bash /home/centos/aws-ec2-ami-backup-retention.sh > /home/centos/aws-ec2-ami-backup-retention.log 2>&1

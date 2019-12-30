@@ -1,0 +1,6 @@
+﻿1) Tạo file run-clamav.sh
+Set full quyền 777 cho file này
+
+2) Set full quyền 777 cho folder chứa log của file sh trên
+
+3) Gọi file php để execute file sh
